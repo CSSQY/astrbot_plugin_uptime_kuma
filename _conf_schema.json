@@ -133,6 +133,12 @@
     "type": "bool",
     "default": true
   },
+  "show_status_url": {
+    "description": "图片中显示状态页网址",
+    "type": "bool",
+    "default": true,
+    "hint": "显示为 <站点地址>/status/<slug>"
+  },
   "show_incidents": {
     "description": "输出置顶通知",
     "type": "bool",

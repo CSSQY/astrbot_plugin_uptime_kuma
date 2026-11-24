@@ -397,6 +397,7 @@ class UptimeKumaPlugin(Star):
         project: dict = {
             "slug": slug,
             "title": slug,
+            "url": f"{base_url}/status/{encoded_slug}",
             "error": "",
             "stats": [],
             "groups": [],
@@ -767,6 +768,9 @@ class UptimeKumaPlugin(Star):
                     {
                         "site": self._base_url(),
                         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "show_status_url": bool(
+                            self.config.get("show_status_url", True)
+                        ),
                         "projects": projects,
                     },
                     return_url=False,

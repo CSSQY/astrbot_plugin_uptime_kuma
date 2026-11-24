@@ -32,6 +32,7 @@ AstrBot 的 Uptime Kuma 状态查询插件。触发指令或关键词时抓取�
 | `default_output_mode` | 默认输出方式：文本或图片 |
 | `show_ping` | 是否显示 Ping |
 | `show_tags` | 是否显示监控项标签 |
+| `show_status_url` | 图片中是否显示状态页网址（`<站点>/status/<slug>`） |
 | `show_incidents` | 是否输出置顶通知 |
 | `show_maintenance` | 是否输出维护公告 |
 | `request_timeout` | 单次请求超时（秒），默认 10 |
@@ -105,6 +106,7 @@ AstrBot 的 Uptime Kuma 状态查询插件。触发指令或关键词时抓取�
 - 指令可用 `-i` / `--image`、`-t` / `--text` 临时覆盖。
 - 关键词规则可单独指定输出方式。
 - 图片通过 AstrBot 文转图服务渲染；失败时自动回退文本。
+- 图片中可为每个项目显示状态页网址（`<站点>/status/<slug>`），由 `show_status_url` 开关控制。
 
 ## 可视化状态面板
 
