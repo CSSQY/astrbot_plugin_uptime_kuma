@@ -84,6 +84,50 @@ def _is_allowed(event: AstrMessageEvent, config: AstrBotConfig) -> bool:
     return mode == "blacklist"
 
 
+def _keyword_rule_in_scope(rule: dict, umo: str) -> bool:
+    """Check whether a keyword rule applies to a chat stream.
+
+    Args:
+        rule: Keyword rule config entry.
+        umo: Unified message origin of the current chat.
+
+    Returns:
+        Whether the rule is enabled for the chat stream.
+    """
+    mode = str(rule.get("scope_mode") or "all").strip().lower()
+    sessions = set(_clean_list(rule.get("sessions")))
+    if mode == "none":
+        return False
+    if mode == "include":
+        return umo in sessions
+    if mode == "exclude":
+        return umo not in sessions
+    return True
+
+
+def _find_keyword_rule(config: AstrBotConfig, message: str, umo: str) -> dict | None:
+    """Find the first keyword rule matching the message and chat stream.
+
+    Args:
+        config: Plugin configuration.
+        message: Raw message text.
+        umo: Unified message origin of the current chat.
+
+    Returns:
+        The matching rule, or None.
+    """
+    folded = (message or "").strip().casefold()
+    if not folded:
+        return None
+    for rule in config.get("keyword_rules") or []:
+        if not isinstance(rule, dict):
+            continue
+        keyword = str(rule.get("keyword") or "").strip().casefold()
+        if keyword and keyword == folded and _keyword_rule_in_scope(rule, umo):
+            return rule
+    return None
+
+
 def _format_epoch_ms(value: object) -> str:
     """Format a millisecond timestamp as local time.
 
@@ -147,16 +191,12 @@ class KeywordTriggerFilter(filter.CustomFilter):
         config = _PLUGIN_CONFIG
         if config is None:
             return False
-        text = (event.get_message_str() or "").strip().casefold()
-        if not text:
+        rule = _find_keyword_rule(
+            config, event.get_message_str(), event.unified_msg_origin
+        )
+        if rule is None:
             return False
-        for rule in config.get("keyword_rules") or []:
-            if not isinstance(rule, dict):
-                continue
-            keyword = str(rule.get("keyword") or "").strip().casefold()
-            if keyword and keyword == text:
-                return _is_allowed(event, config)
-        return False
+        return _is_allowed(event, config)
 
 
 @register(
@@ -199,11 +239,15 @@ class UptimeKumaPlugin(Star):
 
         seen: set[str] = set()
         duplicates: set[str] = set()
+        keyword_count = 0
         for rule in self.config.get("keyword_rules") or []:
             if not isinstance(rule, dict):
                 continue
             keyword = str(rule.get("keyword") or "").strip().casefold()
             if not keyword:
+                continue
+            keyword_count += 1
+            if str(rule.get("scope_mode") or "all").strip().lower() != "all":
                 continue
             if keyword in seen:
                 duplicates.add(keyword)
@@ -217,7 +261,7 @@ class UptimeKumaPlugin(Star):
             "Uptime Kuma plugin ready: site=%s, projects=%d, keywords=%d",
             self._base_url(),
             len(self._projects()),
-            len(seen),
+            keyword_count,
         )
 
     def _base_url(self) -> str:
@@ -615,6 +659,8 @@ class UptimeKumaPlugin(Star):
                     "keyword": str(rule.get("keyword") or "").strip(),
                     "targets": _clean_list(rule.get("targets")),
                     "output_mode": str(rule.get("output_mode") or "default"),
+                    "scope_mode": str(rule.get("scope_mode") or "all"),
+                    "scope_count": len(_clean_list(rule.get("sessions"))),
                 }
             )
 
@@ -813,15 +859,9 @@ class UptimeKumaPlugin(Star):
     @filter.custom_filter(KeywordTriggerFilter)
     async def keyword_query(self, event: AstrMessageEvent):
         """Query the target project bound to an exact keyword message."""
-        rule = None
-        text = (event.get_message_str() or "").strip().casefold()
-        for item in self.config.get("keyword_rules") or []:
-            if not isinstance(item, dict):
-                continue
-            keyword = str(item.get("keyword") or "").strip().casefold()
-            if keyword and keyword == text:
-                rule = item
-                break
+        rule = _find_keyword_rule(
+            self.config, event.get_message_str(), event.unified_msg_origin
+        )
         if rule is None:
             event.stop_event()
             return

@@ -79,6 +79,31 @@
               "文本",
               "图片"
             ]
+          },
+          "scope_mode": {
+            "description": "生效范围",
+            "type": "string",
+            "default": "all",
+            "options": [
+              "all",
+              "include",
+              "exclude",
+              "none"
+            ],
+            "labels": [
+              "全局生效",
+              "仅指定聊天流生效",
+              "指定聊天流不生效",
+              "全局不生效"
+            ],
+            "hint": "“全局不生效”可临时停用该关键词规则"
+          },
+          "sessions": {
+            "description": "生效范围聊天流",
+            "type": "list",
+            "_special": "umo",
+            "hint": "仅“仅指定聊天流生效”或“指定聊天流不生效”模式使用",
+            "default": []
           }
         }
       }

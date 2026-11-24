@@ -44,6 +44,13 @@ const ACCESS_LABELS = {
   blacklist: "黑名单模式",
 };
 
+const SCOPE_LABELS = {
+  all: "全局生效",
+  include: "仅指定聊天流生效",
+  exclude: "指定聊天流不生效",
+  none: "全局不生效",
+};
+
 function node(tag, className, text) {
   const element = document.createElement(tag);
   if (className) {
@@ -311,11 +318,17 @@ function renderSettings(settings) {
           rule.output_mode === "default"
             ? "跟随全局"
             : MODE_LABELS[rule.output_mode] || rule.output_mode;
+        const scopeLabel =
+          SCOPE_LABELS[rule.scope_mode] || rule.scope_mode || "全局生效";
+        const scope =
+          rule.scope_mode === "include" || rule.scope_mode === "exclude"
+            ? `${scopeLabel}（${rule.scope_count ?? 0} 个）`
+            : scopeLabel;
         list.appendChild(
           node(
             "li",
             null,
-            `${rule.keyword || "未命名关键词"} → ${targets}（${mode}）`,
+            `${rule.keyword || "未命名关键词"} → ${targets}（${mode}；${scope}）`,
           ),
         );
       }
