@@ -16,6 +16,7 @@
 - 适配 `aiocqhttp`、`qq_official`、`qq_official_webhook` 平台。
 - 新增 WebUI 插件可视化“状态面板”，支持自动刷新、项目筛选、错误提示与亮/暗主题。
 - 新增完整的 WebUI 配置表单与使用文档。
+- 新增插件图标 `logo.png`（256×256，透明背景）。
 
 ### 说明
 
