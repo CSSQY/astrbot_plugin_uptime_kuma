@@ -1,0 +1,172 @@
+{
+  "uptime_kuma_url": {
+    "description": "Uptime Kuma 站点地址",
+    "type": "string",
+    "hint": "如 https://status.example.com，末尾不要加 /，不要填 /status/xxx",
+    "default": ""
+  },
+  "projects": {
+    "description": "可查询项目（状态页 slug）",
+    "type": "list",
+    "hint": "对应状态页 /status/<slug> 中的 slug；关键词和会话查询项只能引用这里列出的项目",
+    "default": []
+  },
+  "default_targets": {
+    "description": "全局默认查询项",
+    "type": "list",
+    "hint": "未单独配置查询项的聊天流使用这里的项目；留空则不回退",
+    "default": []
+  },
+  "session_targets": {
+    "description": "按聊天流设定的查询项",
+    "type": "template_list",
+    "hint": "在 WebUI 中选择会话并填写该项目下要查询的 slug 列表",
+    "default": [],
+    "templates": {
+      "session_target": {
+        "name": "聊天流查询项",
+        "display_item": "session",
+        "items": {
+          "session": {
+            "description": "聊天流",
+            "type": "string",
+            "_special": "umo",
+            "default": ""
+          },
+          "targets": {
+            "description": "查询项目",
+            "type": "list",
+            "hint": "只能填写 projects 中已列出的 slug",
+            "default": []
+          }
+        }
+      }
+    }
+  },
+  "keyword_rules": {
+    "description": "关键词触发规则",
+    "type": "template_list",
+    "hint": "整条消息仅包含关键词时触发，例如 /服务器状态",
+    "default": [],
+    "templates": {
+      "keyword_rule": {
+        "name": "关键词规则",
+        "display_item": "keyword",
+        "items": {
+          "keyword": {
+            "description": "关键词",
+            "type": "string",
+            "hint": "可包含空格；词后附带其他内容不会触发",
+            "default": ""
+          },
+          "targets": {
+            "description": "查询目标项目",
+            "type": "list",
+            "hint": "只能填写 projects 中已列出的 slug",
+            "default": []
+          },
+          "output_mode": {
+            "description": "输出方式",
+            "type": "string",
+            "default": "default",
+            "options": [
+              "default",
+              "text",
+              "image"
+            ],
+            "labels": [
+              "跟随全局",
+              "文本",
+              "图片"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "default_output_mode": {
+    "description": "默认输出方式",
+    "type": "string",
+    "default": "text",
+    "options": [
+      "text",
+      "image"
+    ],
+    "labels": [
+      "文本",
+      "图片"
+    ],
+    "hint": "指令可用 -i / -t 临时切换；图片渲染失败时自动回退文本"
+  },
+  "show_ping": {
+    "description": "显示 Ping",
+    "type": "bool",
+    "default": true
+  },
+  "show_tags": {
+    "description": "显示监控项标签",
+    "type": "bool",
+    "default": true
+  },
+  "show_incidents": {
+    "description": "输出置顶通知",
+    "type": "bool",
+    "default": true
+  },
+  "show_maintenance": {
+    "description": "输出维护公告",
+    "type": "bool",
+    "default": true
+  },
+  "request_timeout": {
+    "description": "请求超时（秒）",
+    "type": "int",
+    "default": 10
+  },
+  "access_mode": {
+    "description": "黑白名单模式",
+    "type": "string",
+    "default": "whitelist",
+    "options": [
+      "whitelist",
+      "blacklist"
+    ],
+    "labels": [
+      "白名单模式",
+      "黑名单模式"
+    ],
+    "hint": "白名单模式仅白名单用户/群聊可用；黑名单模式除黑名单外均可用"
+  },
+  "user_whitelist": {
+    "description": "用户白名单",
+    "type": "list",
+    "_special": "sender_id",
+    "hint": "白名单用户始终可用；qq_official 请填写 openid",
+    "default": []
+  },
+  "user_blacklist": {
+    "description": "用户黑名单",
+    "type": "list",
+    "_special": "sender_id",
+    "hint": "黑名单用户始终不可用；qq_official 请填写 openid",
+    "default": []
+  },
+  "group_whitelist": {
+    "description": "群聊白名单",
+    "type": "list",
+    "hint": "群聊白名单内仅黑名单用户不可用；qq_official 请填写 group_openid",
+    "default": []
+  },
+  "group_blacklist": {
+    "description": "群聊黑名单",
+    "type": "list",
+    "hint": "群聊黑名单内仅白名单用户可用；qq_official 请填写 group_openid",
+    "default": []
+  },
+  "denied_message": {
+    "description": "无权使用提示",
+    "type": "string",
+    "hint": "留空则不回复；关键词触发始终静默",
+    "default": ""
+  }
+}

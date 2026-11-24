@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Uptime Kuma 状态面板</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="topbar-main">
+          <p class="eyebrow">Uptime Kuma</p>
+          <h1>状态面板</h1>
+          <p class="muted">
+            <span id="site-label">未配置站点</span>
+            <span class="dot-sep">·</span>
+            <span id="updated-label">尚未刷新</span>
+          </p>
+        </div>
+        <div class="topbar-actions">
+          <span id="connection-pill" class="pill pill--idle">等待加载</span>
+          <button id="refresh-button" class="button" type="button">
+            刷新
+          </button>
+          <label class="select-label">
+            <span>自动刷新</span>
+            <select id="auto-refresh">
+              <option value="0">关闭</option>
+              <option value="30">30 秒</option>
+              <option value="60">60 秒</option>
+              <option value="300">5 分钟</option>
+            </select>
+          </label>
+        </div>
+      </header>
+
+      <div id="error-banner" class="banner banner--error" role="alert" hidden>
+        <span id="error-text"></span>
+        <button id="retry-button" class="button button--ghost" type="button">
+          重试
+        </button>
+      </div>
+
+      <section id="empty-state" class="card empty" hidden>
+        <h2>尚未完成配置</h2>
+        <p id="empty-message"></p>
+        <p class="muted">
+          请在 AstrBot WebUI 的插件配置页填写 Uptime Kuma 地址与可查询项目后返回本页。
+        </p>
+      </section>
+
+      <section class="summary-grid" id="summary-grid" aria-label="状态概览">
+        <article class="summary-card">
+          <span class="summary-label">项目</span>
+          <strong id="summary-projects">-</strong>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">监控项</span>
+          <strong id="summary-monitors">-</strong>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">🟢 在线</span>
+          <strong id="summary-up">-</strong>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">🔴 异常</span>
+          <strong id="summary-down">-</strong>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">🟡 等待</span>
+          <strong id="summary-pending">-</strong>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">🔵 维护</span>
+          <strong id="summary-maintenance">-</strong>
+        </article>
+        <article class="summary-card">
+          <span class="summary-label">❓ 未知</span>
+          <strong id="summary-unknown">-</strong>
+        </article>
+      </section>
+
+      <div class="toolbar" id="toolbar">
+        <label class="select-label">
+          <span>显示项目</span>
+          <select id="project-filter">
+            <option value="">全部项目</option>
+          </select>
+        </label>
+        <span id="loading-hint" class="muted" hidden>正在获取状态…</span>
+      </div>
+
+      <div id="skeleton" class="project-grid" hidden>
+        <div class="card skeleton-card"></div>
+        <div class="card skeleton-card"></div>
+        <div class="card skeleton-card"></div>
+      </div>
+
+      <main id="project-list" class="project-grid"></main>
+
+      <section class="card settings-card">
+        <h2>配置摘要</h2>
+        <div id="settings-content" class="settings-content"></div>
+      </section>
+    </div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 24px;
+    background: #eef2f6;
+    color: #1f2937;
+    font-family: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
+    font-size: 14px;
+    line-height: 1.55;
+  }
+  .wrap { width: 720px; margin: 0 auto; }
+  .page-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 22px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #0f172a, #1d4ed8);
+    color: #f8fafc;
+    margin-bottom: 16px;
+  }
+  .brand { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; opacity: .75; }
+  .page-head h1 { margin: 4px 0 0; font-size: 24px; font-weight: 700; }
+  .meta { text-align: right; font-size: 12px; line-height: 1.7; opacity: .85; word-break: break-all; }
+  .project {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, .05);
+  }
+  .project-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .project-head h2 { margin: 0; font-size: 18px; font-weight: 700; word-break: break-word; }
+  .slug { margin-left: 8px; color: #64748b; font-size: 12px; font-weight: 500; }
+  .stats { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
+  .stat {
+    padding: 2px 9px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    background: #f1f5f9;
+    color: #475569;
+  }
+  .stat.up { background: #dcfce7; color: #15803d; }
+  .stat.down { background: #fee2e2; color: #b91c1c; }
+  .stat.pending { background: #fef3c7; color: #b45309; }
+  .stat.maintenance { background: #dbeafe; color: #1d4ed8; }
+  .stat.unknown { background: #f1f5f9; color: #64748b; }
+  .group { margin: 10px 0 4px; }
+  .group h3 {
+    margin: 10px 0 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: .5px;
+  }
+  .monitor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border-radius: 9px;
+    background: #f8fafc;
+    border: 1px solid #eef2f6;
+    margin-bottom: 5px;
+  }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #94a3b8; flex: none; }
+  .dot.up { background: #22c55e; }
+  .dot.down { background: #ef4444; }
+  .dot.pending { background: #f59e0b; }
+  .dot.maintenance { background: #3b82f6; }
+  .monitor-name { flex: 1; min-width: 0; word-break: break-word; }
+  .tag {
+    display: inline-block;
+    margin-right: 6px;
+    padding: 0 6px;
+    border-radius: 5px;
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 600;
+  }
+  .monitor-status { font-size: 12px; font-weight: 600; color: #64748b; white-space: nowrap; }
+  .monitor-status.up { color: #15803d; }
+  .monitor-status.down { color: #b91c1c; }
+  .monitor-status.pending { color: #b45309; }
+  .monitor-status.maintenance { color: #1d4ed8; }
+  .ping { font-size: 12px; color: #64748b; white-space: nowrap; }
+  .block { margin-top: 14px; padding-top: 12px; border-top: 1px dashed #e2e8f0; }
+  .block h3 { margin: 0 0 8px; font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: .5px; }
+  .notice, .maintenance {
+    border-left: 4px solid #94a3b8;
+    background: #f8fafc;
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin-bottom: 7px;
+  }
+  .notice.info { border-left-color: #3b82f6; }
+  .notice.warning { border-left-color: #f59e0b; }
+  .notice.danger { border-left-color: #ef4444; }
+  .notice.primary { border-left-color: #8b5cf6; }
+  .maintenance { border-left-color: #3b82f6; }
+  .notice-head { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    padding: 0 7px;
+    border-radius: 5px;
+    background: #e2e8f0;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .notice-title { font-weight: 700; word-break: break-word; }
+  .notice-content { margin-top: 5px; color: #475569; white-space: pre-wrap; word-break: break-word; }
+  .notice-time { margin-top: 5px; color: #94a3b8; font-size: 11px; }
+  .error {
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #b91c1c;
+    word-break: break-word;
+  }
+  .empty {
+    padding: 26px;
+    text-align: center;
+    color: #64748b;
+    background: #ffffff;
+    border: 1px dashed #cbd5e1;
+    border-radius: 14px;
+  }
+  .footer { text-align: center; color: #94a3b8; font-size: 11px; padding: 8px 0 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="page-head">
+    <div>
+      <div class="brand">Uptime Kuma</div>
+      <h1>状态监控报告</h1>
+    </div>
+    <div class="meta">{{ generated_at }}<br />{{ site }}</div>
+  </header>
+
+  {% if not projects %}
+  <div class="empty">没有可展示的项目</div>
+  {% endif %}
+
+  {% for project in projects %}
+  <section class="project">
+    <div class="project-head">
+      <h2>{{ project.title }}<span class="slug">{{ project.slug }}</span></h2>
+      <div class="stats">
+        {% for item in project.stats %}
+        <span class="stat {{ item.status_class }}">{{ item.icon }} {{ item.label }} {{ item.count }}</span>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% if project.error %}
+    <div class="error">{{ project.error }}</div>
+    {% else %}
+      {% for group in project.groups %}
+      <div class="group">
+        {% if group.name %}<h3>{{ group.name }}</h3>{% endif %}
+        {% for monitor in group.monitors %}
+        <div class="monitor">
+          <span class="dot {{ monitor.status_class }}"></span>
+          <span class="monitor-name">{% if monitor.tag %}<span class="tag">{{ monitor.tag }}</span>{% endif %}{{ monitor.name }}</span>
+          <span class="monitor-status {{ monitor.status_class }}">{{ monitor.icon }} {{ monitor.label }}</span>
+          {% if monitor.ping %}<span class="ping">{{ monitor.ping }}</span>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+
+      {% if project.incidents %}
+      <div class="block">
+        <h3>置顶通知</h3>
+        {% for incident in project.incidents %}
+        <div class="notice {{ incident.status_class }}">
+          <div class="notice-head">
+            <span class="badge">{{ incident.label }}</span>
+            <span class="notice-title">{{ incident.title }}</span>
+          </div>
+          {% if incident.content %}<div class="notice-content">{{ incident.content }}</div>{% endif %}
+          {% if incident.updated %}<div class="notice-time">更新于 {{ incident.updated }}</div>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if project.maintenance %}
+      <div class="block">
+        <h3>维护公告</h3>
+        {% for item in project.maintenance %}
+        <div class="maintenance">
+          <div class="notice-head">
+            <span class="badge">维护</span>
+            <span class="notice-title">{{ item.title }}</span>
+          </div>
+          {% if item.description %}<div class="notice-content">{{ item.description }}</div>{% endif %}
+          {% if item.time %}<div class="notice-time">{{ item.time }}</div>{% endif %}
+        </div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endif %}
+  </section>
+  {% endfor %}
+
+  <footer class="footer">数据来源：Uptime Kuma 状态页</footer>
+</div>
+</body>
+</html>
