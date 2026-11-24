@@ -46,7 +46,7 @@
   .project-title-wrap { min-width: 0; }
   .project-head h2 { margin: 0; font-size: 18px; font-weight: 700; word-break: break-word; }
   .slug { margin-left: 8px; color: #64748b; font-size: 12px; font-weight: 500; }
-  .project-url { margin-top: 3px; color: #64748b; font-size: 11px; word-break: break-all; }
+  .project-url { margin-top: 4px; color: #475569; font-size: 12px; word-break: break-all; }
   .stats { display: flex; flex-wrap: wrap; gap: 6px; justify-content: flex-end; }
   .stat {
     padding: 2px 9px;
@@ -166,7 +166,7 @@
     <div class="project-head">
       <div class="project-title-wrap">
         <h2>{{ project.title }}<span class="slug">{{ project.slug }}</span></h2>
-        {% if show_status_url and project.url %}
+        {% if project.url %}
         <div class="project-url">{{ project.url }}</div>
         {% endif %}
       </div>

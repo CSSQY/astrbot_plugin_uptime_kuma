@@ -394,10 +394,11 @@ class UptimeKumaPlugin(Star):
         """Fetch and normalize one project's status page data."""
         base_url = self._base_url()
         encoded_slug = quote(slug, safe="")
+        show_status_url = self.config.get("show_status_url", True) is not False
         project: dict = {
             "slug": slug,
             "title": slug,
-            "url": f"{base_url}/status/{encoded_slug}",
+            "url": (f"{base_url}/status/{encoded_slug}" if show_status_url else ""),
             "error": "",
             "stats": [],
             "groups": [],
@@ -768,9 +769,6 @@ class UptimeKumaPlugin(Star):
                     {
                         "site": self._base_url(),
                         "generated_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "show_status_url": bool(
-                            self.config.get("show_status_url", True)
-                        ),
                         "projects": projects,
                     },
                     return_url=False,
