@@ -115,3 +115,7 @@ AstrBot 的 Uptime Kuma 状态查询插件。触发指令或关键词时抓取�
 ## 获取项目 slug
 
 打开 Uptime Kuma 状态页，地址形如 `https://status.example.com/status/<slug>`，其中 `<slug>` 即项目名。将 slug 填入 `projects`。
+
+## 更新日志
+
+见 [CHANGELOG.md](./CHANGELOG.md)。
